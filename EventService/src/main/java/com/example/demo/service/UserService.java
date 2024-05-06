@@ -22,6 +22,19 @@ public class UserService {
 	@Autowired
     private StatusMainRepository statusMainRepository;
 	LocalDateTime currentDateTime = LocalDateTime.now();
+	
+	public boolean authenticate(String email, String password) {
+		try{
+			User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+	        if (user != null && password.equals(user.getPassword())) {
+	            return true;
+	        }
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+        return false;
+    }
+	
     // Create operation
     public User createUser(User user) {
     	StatusMain activeStatusMain = statusMainRepository.findById(StatusMap.ACTIVE).orElseThrow(() -> new ResourceNotFoundException("Status Main not found"));
