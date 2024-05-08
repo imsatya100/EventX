@@ -21,9 +21,15 @@ public class Event {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long eventId;
 	@Column(nullable = false)
-	private String eventName;
+	private String name;
 	@Column(nullable = false)
-	private String eventDescription;
+	private String description;
+	@Column(nullable = false)
+	private String venue;
+	@Column(nullable = false)
+	private Timestamp startDate;
+	@Column(nullable = false)
+	private Timestamp endDate;
 	@Column(nullable = false)
 	private Timestamp createdDate;
 	@Column(nullable = false)

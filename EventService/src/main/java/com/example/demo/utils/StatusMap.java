@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.utils;
 
 public interface StatusMap {
 	Integer ACTIVE=1;
