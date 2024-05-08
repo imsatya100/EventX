@@ -9,7 +9,6 @@ import {
 import ResetPassword from './ResetPassword';
 import ModalDialougePopUP from './ModalDialougePopUP';
 import { Alert, Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 const Login = () => {
@@ -17,11 +16,10 @@ const Login = () => {
     email: '',
     password: ''
   });
-  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [variant, setVariant] = useState('danger');
   const [showModal, setShowModal] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const message = useSelector(state => state.forwardMessage);
   
   const handleChange = (e) => {
     setShowAlert(false);
@@ -40,46 +38,44 @@ const Login = () => {
   };
   const validateForm = () => {
     if (!formData.email.trim()) {
-      setError('Email is required');
+      setMessage('Email is required');
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(formData.email.trim())) {
-      setError('Invalid email format');
+      setMessage('Invalid email format');
       return false;
     }
     if (!formData.password.trim()) {
-      setError('Password is required');
+      setMessage('Password is required');
       return false;
     }
-    setError('');
+    setMessage('');
     return true;
   };
   const handleLogin = (e) => {
     e.preventDefault();
+    setVariant('danger');
+    setShowAlert(true);
     if (!validateForm()) {
-      setShowAlert(true);
       return;
     }
     // If there are no errors, proceed with login
+    
     console.log('Form Submitted:', formData);
         // Make POST request to your local URL
     axios.post('http://localhost:8040/api/v1/users/login', formData)
          .then((res) => { 
             console.log(res.status);
             if (res.status === 200) {
-              setShowAlert(true)
               setVariant('success');
-              setError(res.data);
-              console.log(res);
+              setMessage(res.data);
             } else {
-              setShowAlert(true)
-              setError('Please enter correct username and password.');
+              setMessage('Please enter correct username and password.');
             }
          })
          .catch((e) => {
             console.error('Error:', e);
-            setShowAlert(true)
-            setError('An error occurred while processing your request.');
+            setMessage('An error occurred while processing your request.');
          });
         
   };
@@ -93,8 +89,7 @@ const Login = () => {
           </div>
         <form onSubmit={handleLogin}> 
 
-        {showAlert && <Alert variant={variant}>{error}</Alert>}
-        {message && <Alert variant="info">{message}</Alert>}
+        {showAlert && <Alert variant={variant}>{message}</Alert>}
           <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4'>
             <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in</h3>
             <MDBInput
