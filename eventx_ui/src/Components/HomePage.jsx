@@ -37,7 +37,7 @@ const HomePage = () => {
             </span>
         </div>
         <p className="lead mx-auto text-center py-md-4 description px-4 py-sm-2">
-            Welcome to <strong>"EventX"</strong> where organizing your event becomes a breeze! 
+            Welcome to <strong>"MeetsnGreets"</strong> where organizing your event becomes a breeze! 
             Whether you're arranging a birthday bash, a corporate conference, or a wedding extravaganza, we've got you covered. 
             Dive into our interactive event to-do list and make planning your next big event a stress-free experience!
         </p> 
