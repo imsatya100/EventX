@@ -3,13 +3,12 @@ import {
   MDBContainer,
   MDBRow,
   MDBCol,
-  MDBIcon,
   MDBInput
 } from 'mdb-react-ui-kit';
-import ResetPassword from './ResetPassword';
+import ResetPasswordPopup from './ResetPasswordPopup';
 import ModalDialougePopUP from './ModalDialougePopUP';
-import { Alert, Button } from 'react-bootstrap';
-import axios from 'axios';
+import { Alert, Button, Row } from 'react-bootstrap';
+import UserService from '../service/UserService';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -38,15 +37,15 @@ const Login = () => {
   };
   const validateForm = () => {
     if (!formData.email.trim()) {
-      setMessage('Email is required');
+      setMessage('Please enter email address');
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(formData.email.trim())) {
-      setMessage('Invalid email format');
+      setMessage('Please enter valid email address');
       return false;
     }
     if (!formData.password.trim()) {
-      setMessage('Password is required');
+      setMessage('Please enter correct password');
       return false;
     }
     setMessage('');
@@ -63,33 +62,33 @@ const Login = () => {
     
     console.log('Form Submitted:', formData);
         // Make POST request to your local URL
-    axios.post('http://localhost:8040/api/v1/users/login', formData)
-         .then((res) => { 
-            console.log(res.status);
-            if (res.status === 200) {
-              setVariant('success');
-              setMessage(res.data);
-            } else {
-              setMessage('Please enter correct username and password.');
-            }
-         })
-         .catch((e) => {
-            console.error('Error:', e);
-            setMessage('An error occurred while processing your request.');
-         });
-        
-  };
+    UserService.post("/login",formData)
+               .then((res) => { 
+                  console.log(res.status);
+                  if (res.status === 200) {
+                    setVariant('success');
+                    setMessage(res.data);
+                  } else {
+                    setMessage('Please enter correct username and password.');
+                  }
+               })
+              .catch((e) => {
+                console.error('Error:', e);
+                setMessage('An error occurred while processing your request.');
+              });
+    };
   
   return (
-    <MDBContainer fluid>
+    <MDBContainer>
       <MDBRow>
+        <Row className='d-flex flex-row'>
+          {showAlert && <Alert variant={variant}>{message}</Alert>}
+        </Row>
         <MDBCol sm='6'>
-          <div className='d-flex flex-row ps-5 pt-5'>
-            <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#709085' }} />
-          </div>
+          
         <form onSubmit={handleLogin}> 
 
-        {showAlert && <Alert variant={variant}>{message}</Alert>}
+        
           <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4'>
             <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in</h3>
             <MDBInput
@@ -124,12 +123,6 @@ const Login = () => {
             <p className="small mb-5 pb-lg-3 ms-5"><a className="text-muted" href="#!" onClick={openModal}>Forgot password?</a></p>
             <p className='ms-5'>Don't have an account? <a href="/register" className="link-info">Register here</a></p>
           </div>
-          <ModalDialougePopUP 
-            show={showModal} 
-            onClose={closeModal} 
-            title="Reset Password" 
-            bodyContent={<ResetPassword />} 
-          />
         </form>
         </MDBCol>
         <MDBCol sm='6' className='d-none d-sm-block px-0'>
@@ -137,10 +130,16 @@ const Login = () => {
             src="images/EventManagement.jpg"
             alt="Login"
             className="w-100 h-100"
-            style={{ objectPosition: 'left', marginTop:'40px' }}
+            style={{ objectPosition: 'left', objectFit:'contain' }}
           />
         </MDBCol>
       </MDBRow>
+      <ModalDialougePopUP 
+            show={showModal} 
+            onClose={closeModal} 
+            title="Reset Password" 
+            bodyContent={<ResetPasswordPopup />} 
+     />
     </MDBContainer>
   );
 };

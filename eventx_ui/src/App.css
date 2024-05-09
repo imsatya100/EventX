@@ -6565,12 +6565,25 @@ pre code {
 
 .container {
     width: 100%;
+    max-width: 98% !important;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
-    margin-left: auto
+    margin-left: auto;
+    transition: all 0.3s;
+    margin-bottom: 30px;
+    background: #fff;
+    padding: 30px !important;
+    margin: 20px;
+    border-radius: 10px;
+    position: relative;
+    -webkit-box-shadow: 0 2px 2px rgba(0,0,0,.05);
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,.05);
+    box-shadow: 0 2px 2px rgba(0,0,0,.05);
+    border: 1px solid #ddd;
 }
 
+  
 @media (min-width: 576px) {
     .container {
         max-width:540px
@@ -11362,6 +11375,7 @@ input[type=button].btn-block,input[type=reset].btn-block,input[type=submit].btn-
 }
 
 .badge {
+    margin-top: 10px;
     display: inline-block;
     padding: .25em .4em;
     font-size: 75%;
@@ -17264,7 +17278,12 @@ pre[class*=language-] {
     color: #3f9cd6
 }
 .footerlog{font-size:14px;width:100%;position:fixed;bottom:0px;color:#000 !important;padding:4px 16px;}
-
+.footerlog{
+  background: #fff;
+  border-top: 1px solid #000;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 .footer-img {
   display: inline;
   width: 30px;
@@ -17372,3 +17391,13 @@ pre[class*=language-] {
   .carousel-item {
     max-height: 500px;
   }
+  .top-margin{
+    margin-top: 15px;
+  }
+  #content {
+    width: 100%;
+    transition: all 0.3s;
+    margin-bottom: 30px;
+    padding-bottom: 100px;
+}
+

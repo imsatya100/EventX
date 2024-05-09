@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
 const FooterComponent = () => {
   const currentDate = new Date();
@@ -7,7 +7,7 @@ const FooterComponent = () => {
   const formattedDate = currentDate.toLocaleDateString('en-GB', options);
 
   return (
-    <Container fluid className="footerlog">
+    <div className="footerlog">
       <Row>
         <Col>
             <img src="images/EventCalender.svg" className="footer-img" alt="Eventx Logo" />
@@ -15,7 +15,7 @@ const FooterComponent = () => {
             <span className="badge" style={{ background: '#EEE', color: '#666' ,float: 'right' }}>v1.0.0 / {formattedDate}</span>
         </Col>
      </Row>
-    </Container>
+    </div>
   );
 };
 

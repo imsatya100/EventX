@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBInput } from 'mdb-react-ui-kit';
 import { Alert, Button, Row } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({
+    currentPassword: '',
     newPassword: '',
     confirmPassword: ''
   });
-  const { email } = useParams();
   const [message, setMessage] = useState('');
   const [variant, setVariant] = useState('danger');
   const [showAlert, setShowAlert] = useState(false);
@@ -23,17 +22,21 @@ const ChangePassword = () => {
   };
   const validateForm = () => {
     if (!formData.password) {
-      setMessage('Please enter password ');
+      setMessage('Please enter current password ');
       return false;
-    } else if (formData.password.length < 8) {
-      setMessage('Entered password must be at least 8 characters long');
+    }
+    if (!formData.newPassword) {
+      setMessage('Please enter new password ');
+      return false;
+    } else if (formData.newPassword.length < 8) {
+      setMessage('Entered new password must be at least 8 characters long');
       return false;
     }
     if (!formData.confirmPassword) {
-      setMessage('Please re-enter your password');
+      setMessage('Please re-enter new password');
       return false;
     } else if (formData.password !== formData.confirmPassword) {
-      setMessage('Password and confirm password do not match');
+      setMessage('New password and confirm new password do not match');
       return false;
     }
     setMessage('');
@@ -41,16 +44,14 @@ const ChangePassword = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    setVariant('danger');
     setShowAlert(true);
-    // Validate form data here (e.g., check if fields are not empty, valid email format, etc.)
+    setMessage('');
+    setVariant('danger');
     if (!validateForm()) {
       return;
     }
-    console.log('Email:', email);
-    console.log('New Password:', formData.newPassword);
-    setVariant('success');
-    setMessage('Password reset successful.');
+    // Your form submission logic here
+    console.log(formData);
   };
 
   return (
@@ -62,22 +63,22 @@ const ChangePassword = () => {
         <MDBCol sm='6'>
           <form onSubmit={handleSubmit}>
             <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4'>
-              <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Reset Password</h3>
+              <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Change Password</h3>
               <MDBInput
                 wrapperClass='mb-4 mx-5 w-100'
-                placeholder='Email Address'
-                id='email'
-                name='email'
-                type='email'
+                placeholder='Current Password'
+                id='password'
+                name='password'
+                type='password'
                 size="lg"
-                value={formData.email}
-                disabled
+                value={formData.password}
+                onChange={handleChange}
               />
               <MDBInput
                 wrapperClass='mb-4 mx-5 w-100'
                 placeholder='New Password'
-                id='password'
-                name='password'
+                id='newPassword'
+                name='newPassword'
                 type='password'
                 size="lg"
                 value={formData.newPassword}
@@ -99,7 +100,7 @@ const ChangePassword = () => {
               size='lg'
               type='submit'
              >
-              Reset Password
+              Change Password
             </Button>
             </div>
           </form>
