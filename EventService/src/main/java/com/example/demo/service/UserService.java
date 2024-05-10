@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.model.StatusMain;
 import com.example.demo.model.User;
-import com.example.demo.repository.StatusMainRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.utils.PrivilageUtils;
 import com.example.demo.utils.StatusMap;
@@ -22,10 +20,7 @@ import com.example.demo.utils.ValidationUtils;
 public class UserService {
 	@Autowired
     private UserRepository userRepository;
-	@Autowired
-    private StatusMainRepository statusMainRepository;
-	LocalDateTime currentDateTime = LocalDateTime.now();
-	
+
 	public String validateUser(User user) {
 		// Check user email
 		if(ValidationUtils.isNotNullOrEmpty(user.getName())) {
@@ -70,10 +65,9 @@ public class UserService {
 	@Transactional
     public User createUser(User user) {
     	try{
-    		StatusMain draftStatusMain = statusMainRepository.findById(StatusMap.DRAFT).orElseThrow(() -> new ResourceNotFoundException("Status Main not found"));
-        	user.setCreatedDate(Timestamp.valueOf(currentDateTime));
-        	user.setModifiedDate(Timestamp.valueOf(currentDateTime));
-        	user.setStatusMain(draftStatusMain);
+        	user.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
+        	user.setModifiedDate(Timestamp.valueOf(LocalDateTime.now()));
+        	user.setStatus(StatusMap.DRAFT);
         	user.setRole(PrivilageUtils.ROLE_ADMIN);
     	}catch (Exception e) {
     		e.printStackTrace();
@@ -93,13 +87,18 @@ public class UserService {
     public boolean isActiveAccount(String email) {
     	User user = userRepository.findByEmail(email)
     			.orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    	return user.getStatusMain().getStatusId().equals(StatusMap.ACTIVE);  
+    	return user.getStatus().equals(StatusMap.ACTIVE);  
     }
     
     public User getUserDetails(String email) {
-    	User user = userRepository.findByEmail(email)
-    			.orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    	return user.getRole().equals(PrivilageUtils.ROLE_ADMIN)? user : null;  
+    	User user = null;
+    	try {
+    		user = userRepository.findByEmail(email)
+        			.orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    	}catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return user;  
     }
 
     //  =========   Update operation   =========  
@@ -109,8 +108,7 @@ public class UserService {
     		User user = userRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     		user.setName(userDetails.getName());
-            user.setStatusMain(userDetails.getStatusMain());
-            user.setModifiedDate(Timestamp.valueOf(currentDateTime));
+            user.setModifiedDate(Timestamp.valueOf(LocalDateTime.now()));
             return userRepository.save(user);
     	}catch (Exception e) {
     		e.printStackTrace();
@@ -123,11 +121,9 @@ public class UserService {
     	try {
     		User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-            StatusMain activeStatusMain = statusMainRepository.findById(StatusMap.ACTIVE)
-            		.orElseThrow(() -> new ResourceNotFoundException("Status Main not found"));
-            if(user.getStatusMain().getStatusId().equals(StatusMap.DELETE)) 
-            	user.setStatusMain(activeStatusMain);
-            user.setModifiedDate(Timestamp.valueOf(currentDateTime));
+            if(user.getStatus().equals(StatusMap.DRAFT)) 
+            	user.setStatus(StatusMap.ACTIVE);
+            user.setModifiedDate(Timestamp.valueOf(LocalDateTime.now()));
             return userRepository.save(user);
     	}catch (Exception e) {
     		e.printStackTrace();
@@ -140,10 +136,8 @@ public class UserService {
     	try {
     		User user = userRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-            StatusMain deleteStatusMain = statusMainRepository.findById(StatusMap.DELETE)
-            		.orElseThrow(() -> new ResourceNotFoundException("Status Main not found"));
-            user.setStatusMain(deleteStatusMain);
-            user.setModifiedDate(Timestamp.valueOf(currentDateTime));
+            user.setStatus(StatusMap.DELETE);
+            user.setModifiedDate(Timestamp.valueOf(LocalDateTime.now()));
             userRepository.save(user);
     	}catch (Exception e) {
     		e.printStackTrace();

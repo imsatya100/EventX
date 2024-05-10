@@ -14,34 +14,34 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "events")
+@Table(name = "email_details")
 @Data
-public class Event {
+public class EmailDetails {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long eventId;
+	private long emailDetailsId;
 	@Column(nullable = false)
-	private String name;
+	private String fromEmail;
 	@Column(nullable = false)
-	private String description;
+	private String toEmail;
 	@Column(nullable = false)
-	private String venue;
+	private String emailTemplateName;
 	@Column(nullable = false)
-	private Timestamp startDate;
+	private String emailLink;
 	@Column(nullable = false)
-	private Timestamp endDate;
+	private String emailSubject;
 	@Column(nullable = false)
-	private Timestamp createdDate;
-	@Column(nullable = false)
-	private Timestamp modifiedDate;
+	private String emailBody;
 	@Column(nullable = false)
 	private Integer status;
+	@Column
+	private Timestamp createdDate;
+	@Column
+	private Timestamp sentDate;
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "createdBy_id", nullable = false)
     private User createdBy;
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "modifiedBy_id", nullable = false)
-    private User modifiedBy;
-	 
+	
 	
 }

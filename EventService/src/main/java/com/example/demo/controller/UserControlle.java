@@ -44,6 +44,10 @@ public class UserControlle {
     public ResponseEntity<String> createUser(@RequestBody User user) {
     	errorMsg = userService.validateUser(user);
     	if(errorMsg.isEmpty()) {
+    		User oldUser = userService.getUserDetails(user.getEmail());
+    		if(oldUser!=null) {
+    			errorMsg = "There is an account already created with this email address. Please Login!";
+    		}
     		user = userService.createUser(user);
     		try {
     			emailService.sendActivationEmail(user.getEmail(), user.getName());
@@ -66,10 +70,10 @@ public class UserControlle {
     	if(errorMsg.isEmpty()) {
     		try {
     			User user = userService.getUserDetails(email);
-    			if(user.getStatusMain().getStatusId().equals(StatusMap.ACTIVE)) {
+    			if(user.getStatus().equals(StatusMap.ACTIVE)) {
     				emailService.sendResetPasswordEmail(user.getEmail(), user.getName());
             		return ResponseEntity.ok("We have e-mailed your password reset link!");
-        		}else if(user.getStatusMain().getStatusId().equals(StatusMap.DRAFT)){
+        		}else if(user.getStatus().equals(StatusMap.DRAFT)){
         			emailService.sendActivationEmail(user.getEmail(), user.getName());
             		return ResponseEntity.ok("Verify email address to activate your account.");
         		}else {

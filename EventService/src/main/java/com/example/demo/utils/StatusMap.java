@@ -8,4 +8,6 @@ public interface StatusMap {
 	Integer INPROGRESS=5;
 	Integer COMPLETED=6;
 	Integer EXPIRED=7;
+	Integer UNSEND=8;
+	Integer SENT=9;
 }
