@@ -66,22 +66,20 @@ public class ValidationUtils {
             return "Password should contain at least one special character (@#$%^&+=).";
         }
         // Password meets all criteria
-        return "Password is valid.";
+        return "";
     }
     public static String getEmailValidationMessage(String email) {
     	// Check if email matches the pattern
-        if (EMAIL_PATTERN.matcher(email).matches()) {
-            return "Email is valid.";
-        } else {
-            return "Invalid email address.";
-        }
+        if (!EMAIL_PATTERN.matcher(email).matches()) {
+        	return "Invalid email address.";
+        } 
+        return "";
     }
     public static String getFullNameValidationMessage(String fullName) {
     	// Check if fullName matches the pattern
     	if (NAME_PATTERN.matcher(fullName).matches()) {
-    		return "Full name is valid.";
-    	} else {
     		return "Invalid full name.";
-    	}
+    	} 
+    	return "";
     }
 }

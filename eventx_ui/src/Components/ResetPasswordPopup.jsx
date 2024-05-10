@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Alert, Form, FormGroup, Button } from 'react-bootstrap';
 import { MDBInput } from 'mdb-react-ui-kit';
 import UserService from '../service/UserService';
-const ResetPassword = () => {
+const ResetPasswordPopup = () => {
   const [resetEmail, setResetEmail] = useState('');
   const [resetMsg, setResetMsg] = useState('');
   const [resetAlert, setResetAlert] = useState(false);
@@ -15,14 +15,14 @@ const ResetPassword = () => {
   const resetSubmit = (event) => {
     event.preventDefault();
     setResetAlert(true);
-    if(validateEmail){
+    if(!validateEmail){
       setResetMsg("Please provide valid email address!")
       return;
     }
     const params = { email: resetEmail }; // Single parameter
     UserService.postWithParams("/reset",{},params)
                .then((res) => { 
-                  console.log(res.status);
+                  console.log(res);
                   if (res.status === 200) {
                     setVariant('success');
                   } 
@@ -60,4 +60,4 @@ const ResetPassword = () => {
   );
   }
   
-  export default ResetPassword;
+  export default ResetPasswordPopup;

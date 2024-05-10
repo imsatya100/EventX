@@ -30,20 +30,18 @@ const UserService = {
   },
   async postWithParams(endpoint, data, params) {
     try {
-      const queryParams = new URLSearchParams(params).toString();
-      const response = await fetch(`${BASE_URL}${endpoint}?${queryParams}`, {
-        method: 'POST',
+      const response = await axios.post(`${BASE_URL}${endpoint}`, data, {
+        params: params,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
       });
-      return await response;
+      return response;
     } catch (error) {
       console.error('Error posting data with params:', error);
       throw error;
     }
-  },
+  }
 };
 
 export default UserService;
