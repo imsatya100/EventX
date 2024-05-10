@@ -23,7 +23,7 @@ import com.example.demo.utils.ValidationUtils;
 
 @RestController
 @RequestMapping("/api/v1/users")
-public class UserControlle {
+public class UserController {
 	@Autowired
     private UserService userService;
 	@Autowired
@@ -32,11 +32,17 @@ public class UserControlle {
 
 	@PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user) {
-        if (userService.authenticate(user.getEmail(), user.getPassword())) {
-            return ResponseEntity.ok("Login successful");
-        } else {
-            return new ResponseEntity<>("Invalid username or password",HttpStatus.UNAUTHORIZED);
-        }
+		errorMsg="";
+		if(userService.isActiveAccount(user.getEmail())) {
+			if (userService.authenticate(user.getEmail(), user.getPassword())) {
+	            return ResponseEntity.ok("Login successful");
+	        } else {
+	        	errorMsg="Invalid username or password";
+	        }
+		}else {
+			errorMsg="You have not verified your account. Please click on verification link in your email.";
+		}
+		return new ResponseEntity<>(errorMsg,HttpStatus.UNAUTHORIZED);
     }
 	
     // Create
