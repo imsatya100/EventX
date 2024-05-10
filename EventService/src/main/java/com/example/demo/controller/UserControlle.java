@@ -35,7 +35,7 @@ public class UserControlle {
         if (userService.authenticate(user.getEmail(), user.getPassword())) {
             return ResponseEntity.ok("Login successful");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return new ResponseEntity<>("Invalid username or password",HttpStatus.UNAUTHORIZED);
         }
     }
 	
@@ -43,21 +43,21 @@ public class UserControlle {
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody User user) {
     	errorMsg = userService.validateUser(user);
+    	User oldUser = userService.getUserDetails(user.getEmail());
+		if(oldUser!=null) {
+			errorMsg = "There is an account already associated with this email address.";
+		}
     	if(errorMsg.isEmpty()) {
-    		User oldUser = userService.getUserDetails(user.getEmail());
-    		if(oldUser!=null) {
-    			errorMsg = "There is an account already created with this email address. Please Login!";
-    		}
     		user = userService.createUser(user);
     		try {
     			emailService.sendActivationEmail(user.getEmail(), user.getName());
-        		return ResponseEntity.ok("Thanks for signing up. Verify email address to create account.");
+    			return new ResponseEntity<>("Thanks for signing up. Verify email address to create account.",HttpStatus.CREATED);
     		}catch (Exception e) {
     			e.printStackTrace();
     			errorMsg = "There was a problem while sending mail.";
     		}
     	}
-    	return ResponseEntity.badRequest().body(errorMsg);
+    	return new ResponseEntity<>(errorMsg,HttpStatus.OK);
     }
     @PostMapping("/reset")
     public ResponseEntity<String> resetUserPassword(@RequestParam String email) {
@@ -84,7 +84,7 @@ public class UserControlle {
     			errorMsg = "There was a problem while sending mail.";
     		}
     	}
-    	return ResponseEntity.badRequest().body(errorMsg);
+    	return new ResponseEntity<>(errorMsg,HttpStatus.OK);
     }
 
     // Read
@@ -120,7 +120,7 @@ public class UserControlle {
     	if(!ValidationUtils.validateEmail(email)) {
     		errorMsg = ValidationUtils.getEmailValidationMessage(email);
     	}
-        return ResponseEntity.badRequest().body(errorMsg);
+        return new ResponseEntity<>(errorMsg,HttpStatus.OK);
     }
 
     // Delete

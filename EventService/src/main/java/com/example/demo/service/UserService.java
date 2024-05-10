@@ -49,10 +49,15 @@ public class UserService {
         
         return "";
     }
+	@Transactional
 	public boolean authenticate(String email, String password) {
 		try{
 			User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 	        if (user != null && password.equals(user.getPassword())) {
+	        	if(user.getStatus().equals(StatusMap.DRAFT)) {
+	        		user.setStatus(StatusMap.ACTIVE);
+	        		userRepository.save(user);
+	        	}
 	            return true;
 	        }
 		}catch(Exception e) {

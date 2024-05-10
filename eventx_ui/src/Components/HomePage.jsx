@@ -33,7 +33,7 @@ const HomePage = () => {
         </h1>
         <div className="text-center">
             <span className="display-6" style={{ color: '#000' }}>
-                EventX: Your Ultimate Event List!
+                GreetsnMeets: Your Ultimate Event List!
             </span>
         </div>
         <p className="lead mx-auto text-center py-md-4 description px-4 py-sm-2">

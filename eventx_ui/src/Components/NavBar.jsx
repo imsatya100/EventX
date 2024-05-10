@@ -5,7 +5,7 @@ const NavBar = () =>{
   return (
     <Navbar bg="light" expand="lg" style={{ borderBottom: '1px solid #000' , padding: '15px'}}>
       <Navbar.Brand href="/">
-        EventX 
+        GreetsnMeets 
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">

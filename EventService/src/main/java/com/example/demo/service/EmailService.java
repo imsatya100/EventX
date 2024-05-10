@@ -36,7 +36,7 @@ public class EmailService {
         String activationTemplate = "account_activation_email";
     	String emailLink = generateEmailLink("activate",toEmail);
         String htmlContent = generateEmailBodyFromTemplate(fullName, emailLink,activationTemplate);
-        emailDetailsService.saveEmailDetails(toEmail, activationTemplate, emailLink, activateAccountSubject, htmlContent,StatusMap.UNSEND);
+        emailDetailsService.saveEmailDetails(toEmail, activationTemplate, emailLink, activateAccountSubject, StatusMap.UNSEND);
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
         messageHelper.setFrom(fromEmail);
@@ -45,7 +45,7 @@ public class EmailService {
         messageHelper.setText(htmlContent, true);
         try {
         	emailSender.send(message);
-        	emailDetailsService.saveEmailDetails(toEmail, activationTemplate, emailLink, activateAccountSubject, htmlContent,StatusMap.SENT);
+        	emailDetailsService.saveEmailDetails(toEmail, activationTemplate, emailLink, activateAccountSubject, StatusMap.SENT);
         }catch (Exception e) {
         	e.printStackTrace();
         }
@@ -55,7 +55,7 @@ public class EmailService {
         String resetPasswordTemplate = "reset_password_email";
         String emailLink = generateEmailLink("resetPassword",toEmail);
         String htmlContent = generateEmailBodyFromTemplate(fullName, emailLink,resetPasswordTemplate);
-        emailDetailsService.saveEmailDetails(toEmail, resetPasswordTemplate, emailLink, resetPasswordSubject, htmlContent,StatusMap.UNSEND);
+        emailDetailsService.saveEmailDetails(toEmail, resetPasswordTemplate, emailLink, resetPasswordSubject, StatusMap.UNSEND);
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
         messageHelper.setFrom(fromEmail);
@@ -64,7 +64,7 @@ public class EmailService {
         messageHelper.setText(htmlContent, true);
         try {
         	emailSender.send(message);
-        	emailDetailsService.saveEmailDetails(toEmail, resetPasswordTemplate, emailLink, resetPasswordSubject, htmlContent,StatusMap.SENT);
+        	emailDetailsService.saveEmailDetails(toEmail, resetPasswordTemplate, emailLink, resetPasswordSubject, StatusMap.SENT);
         }catch (Exception e) {
         	e.printStackTrace();
         }

@@ -32,8 +32,6 @@ public class EmailDetails {
 	@Column(nullable = false)
 	private String emailSubject;
 	@Column(nullable = false)
-	private String emailBody;
-	@Column(nullable = false)
 	private Integer status;
 	@Column
 	private Timestamp createdDate;

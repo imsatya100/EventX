@@ -53,7 +53,6 @@ const UserRegistration = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setVariant('danger');
-    setShowAlert(true);
     // Validate form data here (e.g., check if fields are not empty, valid email format, etc.)
     if (!validateForm()) {
       return;
@@ -63,6 +62,9 @@ const UserRegistration = () => {
                .then((res) => { 
                   console.log(res.status);
                   if (res.status === 200) {
+                    setVariant('info');
+                  } 
+                  if (res.status === 201) {
                     setVariant('success');
                   } 
                   setMessage(res.data);
@@ -71,6 +73,7 @@ const UserRegistration = () => {
                 console.error('Error:', e);
                 setMessage('An error occurred while processing your request.');
               });
+    setShowAlert(true);
     }; 
   ;
 
